@@ -1,3 +1,7 @@
 package com.padcx.mmz.grocery.mvp.views
-interface MainView {
+import com.padcx.mmz.grocery.data.vos.GroceryVO
+
+interface MainView : BaseView {
+    fun showGroceryData(groceryList : List<GroceryVO>)
+    fun showErrorMessage(message : String)
 }

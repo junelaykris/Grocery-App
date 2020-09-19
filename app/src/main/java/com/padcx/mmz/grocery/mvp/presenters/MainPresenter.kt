@@ -1,3 +1,6 @@
 package com.padcx.mmz.grocery.mvp.presenters
-interface MainPresenter {
+
+import com.padcx.mmz.grocery.mvp.views.MainView
+
+interface MainPresenter : BasePresenter<MainView>{
 }
