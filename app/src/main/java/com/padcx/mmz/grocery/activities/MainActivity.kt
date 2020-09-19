@@ -10,6 +10,9 @@ import com.padcx.mmz.grocery.R
 import com.padcx.mmz.grocery.adapters.GroceryAdapter
 import com.padcx.mmz.grocery.data.vos.GroceryVO
 import com.padcx.mmz.grocery.dialogs.GroceryDialogFragment
+import com.padcx.mmz.grocery.dialogs.GroceryDialogFragment.Companion.BUNDLE_AMOUNT
+import com.padcx.mmz.grocery.dialogs.GroceryDialogFragment.Companion.BUNDLE_DESCRIPTION
+import com.padcx.mmz.grocery.dialogs.GroceryDialogFragment.Companion.BUNDLE_NAME
 import com.padcx.mmz.grocery.mvp.presenters.MainPresenter
 import com.padcx.mmz.grocery.mvp.presenters.impls.MainPresenterImpl
 import com.padcx.mmz.grocery.mvp.views.MainView
@@ -64,6 +67,16 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun showGroceryData(groceryList: List<GroceryVO>) {
         mAdapter.setNewData(groceryList)
+    }
+
+    override fun showGroceryDialog(name: String, description: String, amount: String) {
+        val groceryDialog = GroceryDialogFragment.newFragment()
+        val bundle = Bundle()
+        bundle.putString(BUNDLE_NAME, name)
+        bundle.putString(BUNDLE_DESCRIPTION,description)
+        bundle.putString(BUNDLE_AMOUNT, amount)
+        groceryDialog.arguments = bundle
+        groceryDialog.show(supportFragmentManager, GroceryDialogFragment.TAG_ADD_GROCERY_DIALOG)
     }
 
     override fun showErrorMessage(message: String) {
