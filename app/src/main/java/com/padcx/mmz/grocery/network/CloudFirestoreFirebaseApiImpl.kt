@@ -15,29 +15,29 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi {
         onSuccess: (groceries: List<GroceryVO>) -> Unit,
         onFialure: (String) -> Unit
     ) {
-       /* db.collection("groceries")
-            .get()
-            .addOnSuccessListener { result ->
-                val groceriesList: MutableList<GroceryVO> = arrayListOf()
-                for (document in result) {
-                    val data = document.data
-                    var grocery = GroceryVO()
-                    grocery.name = data["name"] as String
-                    grocery.description = data["description"] as String
-                    grocery.amount = (data["amount"] as Long).toInt()
-                    groceriesList.add(grocery)
-                }
-                onSuccess(groceriesList)
-            }
-            .addOnFailureListener { exception ->
-                onFialure(exception.message ?: "Please check connection")
-            }*/
+        /* db.collection("groceries")
+             .get()
+             .addOnSuccessListener { result ->
+                 val groceriesList: MutableList<GroceryVO> = arrayListOf()
+                 for (document in result) {
+                     val data = document.data
+                     var grocery = GroceryVO()
+                     grocery.name = data["name"] as String
+                     grocery.description = data["description"] as String
+                     grocery.amount = (data["amount"] as Long).toInt()
+                     groceriesList.add(grocery)
+                 }
+                 onSuccess(groceriesList)
+             }
+             .addOnFailureListener { exception ->
+                 onFialure(exception.message ?: "Please check connection")
+             }*/
 
         db.collection("groceries")
             .addSnapshotListener { value, error ->
                 error?.let {
                     onFialure(it.message ?: "Please check connection")
-                } ?: run{
+                } ?: run {
                     val groceriesList: MutableList<GroceryVO> = arrayListOf()
 
                     val result = value?.documents ?: arrayListOf()
@@ -71,7 +71,11 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi {
     }
 
     override fun deleteGrocery(name: String) {
-
+        db.collection("groceries")
+            .document(name)
+            .delete()
+            .addOnSuccessListener { Log.d("Success", "Successfully deleted grocery") }
+            .addOnFailureListener { Log.d("Failure", "Failed to delete grocery" )}
     }
 
 }
