@@ -4,7 +4,10 @@ import android.graphics.Bitmap
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.padcx.mmz.grocery.data.vos.GroceryVO
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 /**
  * Created by Myint Myint Zaw on 9/24/2020.
@@ -12,6 +15,9 @@ import com.padcx.mmz.grocery.data.vos.GroceryVO
 object CloudFirestoreFirebaseApiImpl : FirebaseApi {
 
     val db = Firebase.firestore
+    private val storage = FirebaseStorage.getInstance()
+    private val storageReference = storage.reference
+
     override fun getGroceries(
         onSuccess: (groceries: List<GroceryVO>) -> Unit,
         onFialure: (String) -> Unit
@@ -49,6 +55,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi {
                         grocery.name = data?.get("name") as String
                         grocery.description = data["description"] as String
                         grocery.amount = (data["amount"] as Long).toInt()
+                        grocery.image = (data["image"] as String?).toString()
                         groceriesList.add(grocery)
                     }
                     onSuccess(groceriesList)
@@ -58,12 +65,12 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi {
     }
 
 
-
     override fun addGrocery(name: String, description: String, amount: Int, image: String) {
         val groceryMap = hashMapOf(
             "name" to name,
             "description" to description,
-            "amount" to amount.toLong()
+            "amount" to amount.toLong(),
+            "image" to image
         )
 
         db.collection("groceries")
@@ -78,11 +85,33 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi {
             .document(name)
             .delete()
             .addOnSuccessListener { Log.d("Success", "Successfully deleted grocery") }
-            .addOnFailureListener { Log.d("Failure", "Failed to delete grocery" )}
+            .addOnFailureListener { Log.d("Failure", "Failed to delete grocery") }
     }
 
     override fun uploadImageAndEditGrocery(image: Bitmap, grocery: GroceryVO) {
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
 
+        val imageRef = storageReference.child("images/${UUID.randomUUID()}")
+        val uploadTask = imageRef.putBytes(data)
+        uploadTask.addOnFailureListener {
+            //
+        }.addOnSuccessListener { taskSnapshot ->
+            //
+        }
+
+        val urlTask = uploadTask.continueWithTask {
+            return@continueWithTask imageRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            val imageUrl = task.result?.toString()
+            addGrocery(
+                grocery.name ?: "",
+                grocery.description ?: "",
+                grocery.amount ?: 0,
+                imageUrl ?: ""
+            )
+        }
     }
 
 }
