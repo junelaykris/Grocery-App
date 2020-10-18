@@ -26,11 +26,21 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Hello Mg Mg"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_regular_2x"
+            android:paddingHorizontal="@dimen/margin_medium_2"
+            android:paddingVertical="@dimen/margin_card_medium"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvGroceries"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/margin_medium_2" />
+            android:padding="@dimen/margin_medium_2"
+            android:layout_below="@+id/userName"/>
 
 
     </RelativeLayout>

@@ -1,12 +1,12 @@
 package com.padcx.mmz.grocery.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.RequiresApi
@@ -18,6 +18,7 @@ import com.padcx.mmz.grocery.data.vos.GroceryVO
 import com.padcx.mmz.grocery.dialogs.GroceryDialogFragment
 import com.padcx.mmz.grocery.dialogs.GroceryDialogFragment.Companion.BUNDLE_AMOUNT
 import com.padcx.mmz.grocery.dialogs.GroceryDialogFragment.Companion.BUNDLE_DESCRIPTION
+import com.padcx.mmz.grocery.dialogs.GroceryDialogFragment.Companion.BUNDLE_IMAGE
 import com.padcx.mmz.grocery.dialogs.GroceryDialogFragment.Companion.BUNDLE_NAME
 import com.padcx.mmz.grocery.mvp.presenters.MainPresenter
 import com.padcx.mmz.grocery.mvp.presenters.impls.MainPresenterImpl
@@ -33,6 +34,10 @@ class MainActivity : BaseActivity(), MainView {
 
     companion object {
         const val PICK_IMAGE_REQUEST = 1111
+       /* const val USER_NAME = "USERNAME"*/
+        fun newIntent(context: Context) : Intent{
+           return Intent(context, MainActivity::class.java)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +51,7 @@ class MainActivity : BaseActivity(), MainView {
 
         mPresenter.onUiReady(this)
     }
+
 
     private fun setUpPresenter() {
         mPresenter = getPresenter<MainPresenterImpl, MainView>()
@@ -81,12 +87,13 @@ class MainActivity : BaseActivity(), MainView {
         mAdapter.setNewData(groceryList)
     }
 
-    override fun showGroceryDialog(name: String, description: String, amount: String) {
+    override fun showGroceryDialog(name: String, description: String, amount: String,image:String) {
         mGroceryDialogFragment = GroceryDialogFragment.newFragment()
         val bundle = Bundle()
         bundle.putString(BUNDLE_NAME, name)
         bundle.putString(BUNDLE_DESCRIPTION,description)
         bundle.putString(BUNDLE_AMOUNT, amount)
+        bundle.putString(BUNDLE_IMAGE, image)
         mGroceryDialogFragment?.arguments = bundle
         mGroceryDialogFragment?.show(supportFragmentManager, GroceryDialogFragment.TAG_ADD_GROCERY_DIALOG)
     }
@@ -96,6 +103,14 @@ class MainActivity : BaseActivity(), MainView {
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
+    }
+
+    override fun showUserName(username: String) {
+        userName.text= "Hello $username"
+    }
+
+    override fun showError(error: String) {
+
     }
 
     override fun showErrorMessage(message: String) {
