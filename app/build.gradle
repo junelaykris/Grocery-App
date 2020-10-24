@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.padcx.mmz.grocery"
+        applicationId "com.padcx.mmz.groceryapp"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -57,5 +57,9 @@ dependencies {
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
     implementation 'com.google.firebase:firebase-auth-ktx'
+
+    // Remote Config//
+    implementation 'com.google.firebase:firebase-config-ktx'
+
 
 }
