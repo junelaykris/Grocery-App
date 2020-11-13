@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
+
 
 android {
     compileSdkVersion 30
@@ -55,11 +57,17 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    implementation platform('com.google.firebase:firebase-bom:26.0.0')
     implementation 'com.google.firebase:firebase-auth-ktx'
+
+    implementation 'com.google.firebase:firebase-crashlytics'
 
     // Remote Config//
     implementation 'com.google.firebase:firebase-config-ktx'
+
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx'
 
 
 }

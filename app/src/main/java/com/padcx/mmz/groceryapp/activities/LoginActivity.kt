@@ -27,7 +27,7 @@ class LoginActivity : BaseActivity(), LoginView {
 
         setUpPresenter()
         setUpActionListeners()
-        mPresenter.onUiReady(this)
+        mPresenter.onUiReady(this,this)
     }
 
     private fun setUpActionListeners() {
@@ -36,7 +36,7 @@ class LoginActivity : BaseActivity(), LoginView {
                etEmail.text.isNullOrBlank()-> etEmail.error = "Email is Required"
                etPassword.text.isNullOrBlank() -> etPassword.error = "Password required"
                else->{
-                   mPresenter.onTapLogin(etEmail.text.toString(), etPassword.text.toString())
+                   mPresenter.onTapLogin(this,etEmail.text.toString(), etPassword.text.toString())
                 }
             }
         }
@@ -52,6 +52,7 @@ class LoginActivity : BaseActivity(), LoginView {
 
     override fun navigateToHomeScreen() {
         startActivity(MainActivity.newIntent(this))
+        this.finish()
     }
 
     override fun navigateToRegisterScreen() {

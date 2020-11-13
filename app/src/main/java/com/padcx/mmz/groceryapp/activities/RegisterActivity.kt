@@ -29,6 +29,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
 
         setUpPresenter()
         setUpActionListeners()
+        mPresenter.onUiReady(this, this)
     }
 
     private fun setUpActionListeners() {
@@ -40,6 +41,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
                 etPassword.text.isNullOrBlank() -> etPassword.error = "Password required"
                 else->{
                     mPresenter.onTapRegister(
+                        this,
                         etEmail.text.toString(),
                         etPassword.text.toString(),
                         etUserName.text.toString()
@@ -55,6 +57,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
 
     override fun navigateToToLoginScreen() {
         startActivity(LoginActivity.newIntent(this))
+        this.finish()
     }
 
     override fun showError(error: String) {

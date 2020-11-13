@@ -1,7 +1,9 @@
 package com.padcx.mmz.groceryapp.mvp.presenters.impls
 
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.LifecycleOwner
+import com.padcx.mmz.groceryapp.analytics.SCREEN_HOME
 import com.padcx.mmz.groceryapp.data.models.AuthenticationModel
 import com.padcx.mmz.groceryapp.data.models.AuthenticationModelImpl
 import com.padcx.mmz.groceryapp.data.models.GroceryModelImpl
@@ -37,7 +39,9 @@ class MainPresenterImpl : MainPresenter, AbstractBasePresenter<MainView>() {
         }
     }
 
-    override fun onUiReady(owner: LifecycleOwner) {
+    override fun onUiReady(context: Context, owner: LifecycleOwner) {
+
+        sendEventsToFirebaseAnalytics(context, SCREEN_HOME)
         mView.showUserName(mAuthenticationModel.getUserName())
 
         mView.displayToolbarTitle(mGroceryModel.getAppNameFromRemoteConfig())
