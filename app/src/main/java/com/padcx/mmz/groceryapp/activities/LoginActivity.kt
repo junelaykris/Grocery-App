@@ -3,7 +3,10 @@ package com.padcx.mmz.groceryapp.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.iid.FirebaseInstanceId
 import com.padcx.mmz.groceryapp.R
 import com.padcx.mmz.groceryapp.mvp.presenters.LoginPresenter
 import com.padcx.mmz.groceryapp.mvp.presenters.impls.LoginPresenterImpl
@@ -25,9 +28,25 @@ class LoginActivity : BaseActivity(), LoginView {
         setContentView(R.layout.activity_login)
         setSupportActionBar(findViewById(R.id.toolbar))
 
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            Log.d("fbToken", it.token)
+        }
+
         setUpPresenter()
         setUpActionListeners()
         mPresenter.onUiReady(this,this)
+
+        FirebaseDynamicLinks.getInstance()
+            .getDynamicLink(intent)
+            .addOnSuccessListener {
+                val deepLink = it.link
+                deepLink?.let { deepLink ->
+                    Log.d("deepLink", deepLink.toString())
+                }
+            }
+            .addOnFailureListener {
+                Log.d("error", it.localizedMessage)
+            }
     }
 
     private fun setUpActionListeners() {
